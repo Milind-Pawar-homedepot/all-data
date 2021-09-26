@@ -1,0 +1,82 @@
+<script type="text/javascript">
+    try {
+    
+    Badge_chage_mobile_testA();
+    function Badge_chage_mobile_testA()
+    {  
+    
+    
+        let timerCount = 1;
+        let timer = setTimeout(function() {
+            timerCount = timerCount + 1;
+               
+            if(document.getElementsByClassName("product-details__badge-container-wrapper").length> 0)
+            {             
+              const date1 = new Date();
+  const date2 = new Date('09/12/2021');
+  const diffTime = Math.abs(date2 - date1);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+              
+  
+               
+    
+    if(diffDays>1){
+    
+    let newHtml= `<span class="countdown-timer__wrapper countdown-timer__wrapper--verbose"><img src="https://assets.thdstatic.com/images/v1/clock-black.svg" alt="">
+    <span class="countdown-timer__wrapper countdown-timer__wrapper--verbose">Ends in </span><strong>`+diffDays+` Days</strong></span>`
+    
+    document.querySelector("#root > div > div:nth-child(3) > div.col__12-12 > div > div.product--sticky.col__12-12.col__7-12--sm > div > div:nth-child(1) > div > span > span.product-details__badge-container.product-details__badge-container--timer").innerHTML= newHtml
+    
+    }
+    else{
+    
+    
+    var countDownDate = new Date("Sep 12, 2021 23:59:59").getTime();
+    
+    var x = setInterval(function() {
+    
+    var now = new Date().getTime();
+    
+    var distance = countDownDate - now;
+     
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+    
+    if (hours < 10)   { hours = "0" + hours;}
+    if (minutes < 10) {minutes = "0" + minutes;}
+    if (seconds < 10) {seconds = "0" + seconds;}
+    // Output the result in an element with id="demo"
+    
+    let newHtml= `<span class="countdown-timer__wrapper countdown-timer__wrapper--verbose"><img src="https://assets.thdstatic.com/images/v1/clock-black.svg" alt="">
+    <span class="countdown-timer__wrapper countdown-timer__wrapper--verbose">Ends in </span><strong>`+hours + ":"
+    + minutes + ":" + seconds + ` hours</strong></span>`
+    
+    document.querySelector("#root > div > div:nth-child(3) > div.col__12-12 > div > div.product--sticky.col__12-12.col__7-12--sm > div > div:nth-child(1) > div > span > span.product-details__badge-container.product-details__badge-container--timer") .innerHTML= newHtml
+    // If the count down is over, write some text 
+    if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("demo").innerHTML = "EXPIRED";
+    }
+    }, 1000);
+    
+    
+    
+    }
+        }
+        }, 2000);
+        if (timerCount > 1000) {
+            clearInterval(timer);
+        }   
+    
+    
+    
+    }
+    
+    } catch (error) {
+    
+    }
+    
+    </script >

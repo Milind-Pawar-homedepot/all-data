@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Example</title>
+    <link rel="stylesheet" type="text/css" href="../node_modules/thd-overlay/css/main.css">
+</head>
+
+<body>
+    <p>This adds an item to cart</p>
+    <button id="addToCart">Add Item to Cart</button>
+    <script>
+        window.THD_GLOBAL = {}
+    </script>
+    <script src="./THD_TOUCH_GLOBALS.js"></script>
+    <script type="text/javascript" src="../dist/thd-cart-bindings.main.js"></script>
+    <script>
+
+        // change this to the environment the item exists in
+        // default is http://www.homedepot.com
+        const host = 'http://www.homedepot.com';
+        const el = document.getElementById('addToCart');
+        const el2 = document.getElementById('addToCart2');
+        el.addEventListener('click', (e) => {
+            e.preventDefault();
+            THD_CART_BINDINGS.addToCart({
+                "itemId": "202074470",
+                "quantity": 10,
+                "fulfillmentLocation": "DirectShip",
+                "fulfillmentMethod": "ShipToHome",
+                "proService": "AtHomeAssembly"
+            }, {
+                host: host,
+                channel: 'desktop',
+                ignoreThrottle: true,
+                digitalDataFlag: false
+            })
+                .on('throttled', function () {
+                    // execute your current code atc here
+                })
+                .on('success', (resp) => {
+                    console.log(resp);
+                });
+        });
+
+
+
+    </script>
+</body>
+
+</html>

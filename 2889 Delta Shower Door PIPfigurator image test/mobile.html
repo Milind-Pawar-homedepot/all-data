@@ -1,0 +1,56 @@
+
+<script type="text/javascript">
+try {
+
+    Change_Image ();
+    function Change_Image()
+    {  
+        
+
+     let timerCount = 1;
+        let timer = setInterval(function() {
+            timerCount = timerCount + 1;
+            if(document.getElementById("browse-search-pods-1") )
+            {                 
+                const Target_url
+                 = ["https://www.homedepot.com/b/Bath-Showers-Shower-Doors/N-5yc1vZbzcg",
+                    "https://www.homedepot.com/b/Bath-Showers-Shower-Doors-Alcove-Shower-Doors/N-5yc1vZcbmq",
+                    "https://www.homedepot.com/b/Bath-Showers-Shower-Doors-Shower-Enclosures/N-5yc1vZcbn2",
+                    "https://www.homedepot.com/b/Bath-Bathtubs-Bathtub-Doors/N-5yc1vZbzaw"]
+                const page_url = window.location.href
+
+                Target_url.forEach(item => 
+                {
+                    if (page_url.includes(item)) 
+                    {
+                        if(document.querySelector("#browse-search-pods-1 > div:nth-child(1) > div > div.pod-header-wrapper > div > a > div > h2 > span.product-pod__title__product").innerText === 'Custom Shower Door Collection')
+                        {
+                            document.querySelector("#browse-search-pods-1 > div:nth-child(1) > div > div.grid > div > div.product-pod__left-side.col__6-12 > div:nth-child(1) > a > div > img").src = "https://p20.zdusercontent.com/attachment/495534/pvWGBIVpXiOQPhxdytibCt9PF?token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..RB9BpVxYk2_8_O1CjzIyJw.KIbT9BUFfoNBZSe21EK86XrUFm5ObPGLSFk-5LqUkMY3OH2XNaCeQpNGXt8JTNXPCnqj5YJq8WcA7DR8ZPth61N8bRXcsGemDBmmJd1YGQcIEFCzEO0B7Yu6xbpsmKzU0uNHg76ny0bD4tq9VlYs2DpffxnGl5C0elyrzFsX4Jok0rKkMKbUmXLkVyltM3PotCiiWsKTEGAnKOlXqls6GV5RFTDTSDvaHtVGIEsjud1yHbm2zfDafRcjU0YYP75eaRMmdxuiN3AZivkt3ASsqc3YWCDp9jIa-PPfvYJzEvE.pT-byFFf5OtamKgtpDwMAw"    
+                            if(document.querySelector("#browse-search-pods-1 > div:nth-child(1) > div > div.product-pod__badges > span"))
+                                {
+                                document.querySelector("#browse-search-pods-1 > div:nth-child(1) > div > div.product-pod__badges > span").remove();
+                                }
+                            // document.querySelector("#browse-search-pods-1 > div:nth-child(1) > div > div.product-pod__favorite.product-pod__favorite--top-right > div > button").remove()   
+                            if( document.querySelector("#browse-search-pods-1 > div:nth-child(1) > div > div.product-pod__favorite.product-pod__favorite--mobile.product-pod__favorite--top-right"))
+                            {
+                            document.querySelector("#browse-search-pods-1 > div:nth-child(1) > div > div.product-pod__favorite.product-pod__favorite--mobile.product-pod__favorite--top-right").remove()
+                            }  
+                     }
+                    }
+                })
+    		}
+        }, 2000);
+        if (timerCount > 1000) {
+            clearInterval(timer);
+        }   
+
+
+
+
+}
+    
+} catch (error) {
+    
+}
+
+</script >

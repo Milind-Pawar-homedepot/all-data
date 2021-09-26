@@ -1,0 +1,42 @@
+
+    
+
+<script type="text/javascript">
+try {
+
+    Change_bullet_Point ();
+    function Change_bullet_Point()
+    {  
+
+
+     let timerCount = 1;
+        let timer = setInterval(function() {
+            timerCount = timerCount + 1;
+            if(document.getElementsByClassName("salient-points list list--type-square").length> 0)
+            {                 
+                var url_OmsId = [304820618,303786842,206934738,206934797,304820637,206934770,206934785,304820627,303786893,303811995,206934781]
+                const page_url = window.location.href
+
+                url_OmsId.forEach(item => {
+                    if (page_url.includes(item)) {
+                        var text = document.querySelector("#root > div > div:nth-child(3) > div > div > div.col__12-12.col__5-12--sm > div > div > div:nth-child(5) > ul > li:nth-child(3)").innerText
+                        var updatedText = text.replace('see Sizing Guide', '<a class="u__default-link" href="https://images.homedepot-static.com/catalog/pdfImages/66/66e27c6a-79eb-49dd-8820-12d743b6180e.pdf"> see Sizing Guide</a>');
+                        document.querySelector("#root > div > div:nth-child(3) > div > div > div.col__12-12.col__5-12--sm > div > div > div:nth-child(5) > ul > li:nth-child(3)").innerHTML = updatedText
+                    }
+                })
+    		}
+        }, 1000);
+        if (timerCount > 1000) {
+            clearInterval(timer);
+        }   
+
+
+
+
+}
+    
+} catch (error) {
+    
+}
+
+</script >

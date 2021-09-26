@@ -1,0 +1,22 @@
+<script type="text/javascript">
+    try {
+    
+        Remove_Digital_Endcap_Mobile ();
+        function Remove_Digital_Endcap_Mobile()
+        {  
+    
+            let timer = setTimeout(function() {
+             
+                if(document.querySelector("body > section > article > div > div:nth-child(2) > div.col__12-12.col__12-12--xs.col__10-12--sm.col__10-12--md.col__10-12--lg.col__10-12--xl > div > div > div:nth-child(8)"))
+                {                 
+                    document.querySelector("body > section > article > div > div:nth-child(2) > div.col__12-12.col__12-12--xs.col__10-12--sm.col__10-12--md.col__10-12--lg.col__10-12--xl > div > div > div:nth-child(8)").remove()
+                }
+            }, 1000);
+     
+    }
+        
+    } catch (error) {
+        
+    }
+    
+    </script >

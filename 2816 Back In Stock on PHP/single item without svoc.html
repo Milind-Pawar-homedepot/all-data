@@ -1,0 +1,270 @@
+<script type="text/javascript">
+
+
+try {
+
+    
+
+    const readCookie = function (e) {
+        e = encodeURIComponent(e);
+        let t = (";" + document.cookie).split(" ").join(";"),
+            n = t.indexOf(";" + e + "="),
+            i = n < 0 ? n : t.indexOf(";", n + 1);
+        return n < 0 ? "" : decodeURIComponent(t.substring(n + 2 + e.length, i < 0 ? t.length : i))
+    };
+
+    const readAndDecodeBase64Cookie = function (cookieName, separator = ".") {
+        try {
+            let encodedCookieValue = readCookie(cookieName);
+            let encodedSubstring = encodedCookieValue.split(separator)[0];
+            let regexPattern = /"/g;
+            let cleanedEncodedSubstring = encodedSubstring.replace(regexPattern, '');
+            let decodedCookieValue = atob(cleanedEncodedSubstring);
+            let cookieObject = (typeof decodedCookieValue === "string" && decodedCookieValue ? JSON.parse(decodedCookieValue) : {});
+            return cookieObject;
+        }
+        catch (error) {
+            return {};
+        }
+    };
+
+    const getUserStatus = function () {
+        let b2b = readCookie('THD_CUSTOMER');
+        let b2c = readCookie('THD_USER');
+        let userStatus = '';
+
+        if (b2c != "") {
+            let temp = readAndDecodeBase64Cookie("THD_USER", ".");
+            if (temp.svocCustomerAccountId != '')
+                userStatus = 'b2cAuth';
+        }
+        if (b2b != "") {
+            let temp = readAndDecodeBase64Cookie("THD_CUSTOMER", ".");
+            if (temp.c == "B2X" && temp.t != '')
+                userStatus = 'b2xAuth';
+            if (temp.c == "B2B" && temp.t != '')
+                userStatus = 'b2bAuth';
+        }
+        if (b2b == "" && b2c == "") {
+            userStatus = "guest";
+        }
+        return userStatus;
+
+    }
+
+    const getStoreID = function () {
+        let storeID = "";
+        let decodedValue = JSON.parse(decodeURIComponent(readCookie("THD_LOCALIZER")));
+        if (decodedValue) {
+            let locStore = decodedValue.THD_LOCSTORE;
+            if (locStore.length > 0) {
+                let locStoreDetails = locStore.split("+");
+                if (locStoreDetails.length > 1) {
+                    storeID = locStoreDetails[0] || '';
+                    if (storeID != '') {
+                        if (!isNaN(parseInt(locStoreDetails[0]))) {
+                            storeID = locStoreDetails[0];
+                        }
+                    }
+                }
+            }
+        }
+        if (!storeID && digitalData && digitalData.user && digitalData.user.localization) {
+            storeID = digitalData.user.localization.storeNumber;
+        }
+        if (!storeID && _dD && _dD.user && _dD.user.localization) {
+            storeID = _dD.user.localization.storeNumber;
+        }
+        //storeID = storeID ? parseInt(storeID, 10) : "";
+        if (!storeID) {
+            storeID = ""
+        };
+        return storeID;
+    }
+
+    const getPriceBreakdown = (price) => {
+        if (typeof price === "number") {
+            let dollar = price | 0;
+            let currency = !dollar ? "¢" : "$";
+            let cent = (price % 1).toFixed(2).match(/\d{2}$/g)[0];
+            return { currency, dollar, cent };
+        }
+        return null;
+    };
+
+    const getCookie = (cname) => {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    };
+    const extractUserInfo = function () {
+        return atob(JSON.parse((getCookie("THD_USER"))));
+    };
+
+    const getSVOC_ID = () => {
+        const info = JSON.parse(extractUserInfo());
+        if (info) {
+            svoc_id = info['svocCustomerAccountId'];
+        }
+
+        return svoc_id;
+    }
+
+    function backInStock() {
+
+
+        const userStatus = getUserStatus();
+        const apiLink = 'https://datascience-testservice-api.hd-datascience-prod.gcp.homedepot.com/dts/v1/product?anchor=03ED0E0B870726100S&model=back_in_stock_alert&appid=desktop&key=AnPrMR0LKfdglJQfoHqsT4sAhDLHNaGw'
+        if (userStatus == "b2cAuth") {
+            fetch(apiLink)
+                .then(resp => resp.json())
+                .then(resp => {
+                    if (resp['products']) {
+                        setTimeout(function () {
+                            createProductCard(resp['products']);
+                        }, 2000);
+                    }
+                });
+        }
+
+
+
+    }
+
+
+    function createProductCard(data) {
+        console.log(data)
+
+        console.log(data[0].productId)
+
+        let imageURL = data[0].imageURL;
+        if (imageURL.includes('<SIZE>')) {
+            imageURL = imageURL.replace("<SIZE>", "300");
+        }
+        let price = data[0].price.toString();
+        let priceWithDecimal = price.split('.');
+
+
+        let html_data = ` <div data-automation-id="TodaysRecommendationsForYou" id="TodaysRecommendationsForYou" testid="TodaysRecommendationsForYou" class="desktop-items content-card home-page-card todays-recs content-card--responsive" data-type="container">
+      <meta data-prop="name" content="pers_todaysRecsForYou">
+      <div role="presentation" class="content-card__body">
+         <div class="col__12-12 content-card__header">
+            <div class="row-header row-header--nomargin">
+               <div class="row-header__title">
+                  <h2 class="row-header__text row-header__text--plain">It's Back In stock</h2>
+               </div>
+            </div>
+         </div>
+         <div class="content-card__summary" style="max-height: none;">
+            <div class="carousel" style="margin-right: -15px; width: calc(100% + 15px);">
+            
+               <div class="axis-horizontal slider-wrapper">
+                  <div class="slider animated" style="transform: translate3d(0px, 0px, 0px); transition-duration: 350ms;">
+                  
+                        <article class="product__container " data-type="product">
+                           <meta data-prop="productID" content="`+ data[0].productId + `">
+                           <meta data-prop="name" content="`+ data[0].productName + `">
+                           <meta data-prop="brand" content="DUST OFF">
+                           <div class="product__img_link_container">
+                              <a href="`+ data[0].canonicalURL + `">
+                                 <div class="product__image-container" style="width: 130px;"><img src="`+ imageURL + `" alt="Image not found" class="product__image"></div>
+                              </a>
+                           </div>
+                        </article>
+                  
+                     <div style="padding-top: 10%;">
+                     	  <a href="`+ data[0].canonicalURL + `">
+                                <div class="product__description" style=" padding-bottom: 4%; display:table" >
+                                 
+                                    <span>
+                                    <span class="product__brand">`+ data[0].brand + ` </span>` + data[0].productName + `</span>
+                                   
+                                </div>
+                          </a>
+                        <div class="rating-and-reviews"><a href="`+ data[0].canonicalURL + `" class="reviews"><span class="stars" rel="` + data[0].rating + `" style="width: 92.72%;"></span></a><a class="number-rating" href="/p/Sterilite-70-Qt-Ultra-Storage-Box-19888604/204606576">(` + data[0].reviews + `)</a></div>
+                        <span class="product-price"><b class="product-price__container"><span class="product-price__dollarSign"><sup class="product-price__dollarSign_sup">$</sup></span><span>`+ priceWithDecimal[0] + `</span><span class="product-price__cents"><sup class="product-price__cents_sup">` + priceWithDecimal[1] + `</sup></span></b></span>
+                     </div>
+                  </div>
+               </div>
+              
+            <span >
+            	<button id="tht_add_to_cart"class="u--marginNormal-top bttn-outline bttn-outline--primary" style="width: 95%;">
+            		<span class="bttn__content">Add to Cart</span>
+            	</button>
+            </span>
+         </div>
+      </div>
+   </div>`
+
+        function insertAfter(newNode, referenceNode) {
+            referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+        }
+        let old_node = document.querySelector("#personalized-homepage > div.grid.isBound > div:nth-child(2)")
+
+        let new_element = document.createElement("div");
+        new_element.className = "col__12-12 col__6-12--xs col__6-12--sm col__4-12--md col__4-12--lg";
+        new_element.innerHTML = html_data;
+
+
+        insertAfter(new_element, old_node)
+
+        let addToCartBtn = document.getElementById("tht_add_to_cart")
+        addToCartBtn.addEventListener("click", function () {
+            const storeID = getStoreID();
+            window.tntExposedObjects['thd-cart-bindings'].addToCart({
+                "itemId": data[0].productId,
+                "quantity": 1,
+                "fulfillmentMethod": "ShipToStore",
+                "fulfillmentLocation": storeID
+            }, {
+                host: '//' + window.location.host,
+                channel: 'desktop',
+            })
+                .on('success', function (resp) {
+                    //console.log(resp);
+                })
+                .on('error', function (resp) {
+                    //console.log(resp);
+                })
+        });
+
+    }
+
+
+
+
+
+    function initiateChange() {
+        const targetNode = document.querySelectorAll("#personalized-homepage > div.grid.isBound");         /* Target element */
+        let timerCount = 1;
+        let timer = setInterval(function () {
+            timerCount = timerCount + 1;
+            if (targetNode.length > 0) {
+                clearInterval(timer);
+                //custom function
+
+                backInStock()
+            }
+        }, 600);
+        if (timerCount > 1000) {
+            clearInterval(timer);
+        }
+    }
+
+     initiateChange();
+
+} catch (error) {
+
+}
+</script>
+
+

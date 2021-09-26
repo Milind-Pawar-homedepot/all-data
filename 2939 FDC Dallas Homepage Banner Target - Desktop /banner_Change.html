@@ -1,0 +1,129 @@
+<style>
+    @keyframes findSlider {
+        from {
+            opacity: 0.99;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .top-banner-carousel__list--item-container {
+        animation-duration: 0.001s;
+        animation-name: findSlider;
+    }
+
+    @keyframes findSlideClick {
+        from {
+            opacity: 0.99;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    li[data-testid="visible-carousel-slide"] .alink {
+        animation-duration: 0.001s;
+        animation-name: findSlideClick;
+    }
+</style>
+
+<script>
+    const programId = "1051";
+    let destLink = 'https://www.homedepot.com/b/Featured-Products-Dallas-Scheduled-Delivery/N-5yc1vZ2fkp9pi';
+    let SlideDImage = 'https://www.homedepot.com/hdus/en_US/DTCCOMNEW/fetch/Brands/Interline/THD-Pro-Dallas-FDC-Capabilities-TT-Banner-WF-2636454.jpg';
+    let SlideMImage = 'https://www.homedepot.com/hdus/en_US/DTCCOMNEW/fetch/Brands/Interline/THD-Pro-Dallas-FDC-Capabilities-TT-Banner-Mob-WF-2636454.jpg';
+    let location_of_image = 'A1';
+    
+    var B2bSliderImageA2Update = function () {
+        try {
+            const extractUserInfo = function (cookieString) {
+                const name = 'THD_CUSTOMER=';
+                const decodedCookie = decodeURIComponent(document.cookie);
+                const ca = decodedCookie.split(';');
+                let COOKIE_THD_CUSTOMER_VALUE;
+                for (let i = 0; i < ca.length; i += 1) {
+                    let c = ca[i];
+                    while (c.charAt(0) === ' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) === 0) {
+                        COOKIE_THD_CUSTOMER_VALUE = c.substring(name.length, c.length);
+                        break;
+                    }
+                }
+                COOKIE_THD_CUSTOMER_VALUE = COOKIE_THD_CUSTOMER_VALUE.replace(
+                    /"/g,
+                    '',
+                ).substring(0, COOKIE_THD_CUSTOMER_VALUE.indexOf('.'));
+
+                return JSON.parse(atob(COOKIE_THD_CUSTOMER_VALUE));
+
+            }
+            const fetchResources = (accountId, customerId) => {
+
+                const request = 'https://www.homedepot.com/b2b/user/account/' + accountId + '/customer/' + customerId + '/homePage'
+                const headers = new Headers();
+                headers.append('Content-Type', 'application/json');
+                headers.append('channelid', '1');
+                const options = { method: 'GET', headers, mode: 'cors', cache: 'default' };
+                const response = fetch(request, options);
+                return response.then(function (data) {
+                    return data.json().then(function (jsonResponse) {
+                        return jsonResponse;
+                    }).catch(function (err) { return err; });
+                }).catch(function (err) { return err; });
+            }
+            const contains = (arr, key, val) => {
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i][key] === val) return true;
+                }
+                return false;
+            }
+
+
+            let isMobile = (/Mobile/i.test(navigator.userAgent));
+            let miss = Number();
+            let interval = 100, timer = setInterval(() => {
+                if (document.querySelector('.top-banner-carousel__list--item-container')) {
+                    clearInterval(timer);
+                    const { u, t } = extractUserInfo();
+                    fetchResources(u, t).then((response) => {
+                        if (response) {
+                            const { currentYearMemberships } = response;
+                            let membership = currentYearMemberships.currentYearMembershipInfo;
+                            if (contains(membership, "programId", programId)) {
+                                document.querySelector('.top-banner-carousel__list--item-container').addEventListener('DOMSubtreeModified', (event) => {
+                                    setTimeout(() => {
+                                        document.querySelectorAll('a[data-id="segment-banner-link"]').forEach(node => {
+                                            let url = window.getComputedStyle(node.querySelector('section > section')).getPropertyValue('background-image');
+                                            if (url.indexOf(location_of_image) > -1) {
+                                                node.setAttribute('href', destLink);
+                                                node.classList.add('alink');
+                                                if (isMobile) {
+                                                    node.querySelector('section > section').style.backgroundImage = 'url(' + SlideMImage + ')'
+                                                }
+                                                else {
+                                                    node.querySelector('section > section').style.backgroundImage = 'url(' + SlideDImage + ')'
+                                                }
+                                            }
+                                        });
+
+                                    }, 100);
+                                });
+                            }
+                        }
+                    });
+                }
+                else {
+                    miss++
+                    miss > interval && clearInterval(timer)
+                }
+            }, interval);
+        }
+        catch (e) { }
+    }();
+
+</script>
