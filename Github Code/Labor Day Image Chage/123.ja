@@ -1,0 +1,10 @@
+   let html=`<picture>
+      <source media="(min-width: 640px)" srcset="https://contentgrid.thdstatic.com/hdus/en_US/DTCCOMNEW/fetch/NexGen/ContentPage/toolsavingsherodsk1.png">
+
+      <source media="(max-width: 640px)" srcset="https://contentgrid.thdstatic.com/hdus/en_US/DTCCOMNEW/fetch/NexGen/ContentPage/toolsavingsheromob1.png">
+      <img src="https://contentgrid.thdstatic.com/hdus/en_US/DTCCOMNEW/fetch/NexGen/ContentPage/20210715AppliancesD2.png" class="stretchy" alt="SAVINGS + FREE  2-DAY DELIVERY On Select Tools, Tool  Storage &amp; Accessories Shop Now" title="">
+    </picture>`;
+            
+           
+            
+            document.querySelector('div.content_image>a').innerHTML= htm;

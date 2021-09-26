@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<!-- <style>
+    .container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+}
+
+/* Then style the iframe to fit in the container div with full height and width */
+.responsive-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 50%;
+  height: 50%;
+}
+</style> -->
+<script>
+$(document).ready(function(){
+$( "#hello" ).dialog({ autoOpen: false });
+$( "#say_it" ).click(function() {
+$( "#hello" ).dialog( "open" );
+});
+});
+</script>
+</head>
+<body>
+<!-- 
+<button id="say_it">Say "Hello!"</button>
+<div id="hello" title="Hello  World!"><p><font face="Georgia" size="4">
+Hey, world, I just said "Hello!"</font></p></div> -->
+
+ <!-- <div class="container">
+    <iframe class="responsive-iframe" src="https://www.lg.com/us/kitchen/measure-first/story.html"></iframe>
+    <!-- <iframe id="forPostyouradd" src="http://www.w3schools.com"  width="200" height="200" > </iframe> -->
+  <!-- </div> --> 
+
+  <button onclick="showOverlay()"> click me</button>
+  <script type="text/javascript">
+
+
+
+const showOverlay = () => {
+			const prompt = document.createElement('div')
+			prompt.className = 'tt-overlay'
+			prompt.innerHTML = `
+			<div class="tt-backdrop-overlay">
+				<div class="tt-backdrop-stage-overlay" style="position: relative; top: 20%;">
+					<div class="tt-prompt-overlay">
+						<div class="bottom-container">
+							<div style="width:100%;">
+								<div style="float: right;padding: 10px;">
+									<div style="display: flex; justify-content:space-between;">	
+										<button class="tt-close-overlay">
+											<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px" viewBox="0 0 15 15" version="1.1"> <!-- Generator: Sketch 59.1 (86144) - https://sketch.com --> <title>Action/Remove_Close</title> <desc>Created with Sketch.</desc> <g id="Standards" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Current-Icons" transform="translate(-738.000000, -406.000000)" fill="#F96302"> <g id="Action/Remove_Close" transform="translate(738.000000, 406.000000)"> <path d="M12.0208153,2.84661184e-13 L14.1421356,2.12132034 L9.192,7.071 L14.1421356,12.0208153 L12.0208153,14.1421356 L7.071,9.192 L2.12132034,14.1421356 L2.84217094e-13,12.0208153 L4.949,7.071 L2.83773005e-13,2.12132034 L2.12132034,2.84661184e-13 L7.071,4.949 L12.0208153,2.84661184e-13 Z"></path> </g> </g> </g> </svg>
+									  </button>
+									</div>
+								</div>
+							</div>
+							<div>
+							<iframe src="https://www.lg.com/us/kitchen/measure-first/story.html" style="width: 100%;min-height: 500px;">
+    						</iframe>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>`.trim()
+
+			prompt.onclick = function (e) {
+				if (e.target.classList.contains('tt-backdrop-overlay') || e.target.classList.contains('tt-backdrop-stage-overlay') || e.target.classList.contains('tt-close-overlay') || e.target.closest('.tt-close-overlay')) {
+					closePrompt.call(prompt)
+				}
+			}
+
+			function closePrompt() {
+				document.body.classList.remove('no-scroll-overlay')
+				this.remove()
+			}
+			document.body.append(prompt)
+			document.body.classList.add('no-scroll-overlay')
+		}
+
+</script>
+<style>
+	.tt-overlay .tt-prompt-overlay {
+		z-index: 100;
+		background: #fff;
+		width: 60%;
+        min-height:500px;
+		margin: 0 auto;
+	}
+
+	.tt-overlay .tt-backdrop-overlay {
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		pointer-events: auto;
+		position: fixed;
+		background-color: rgba(0, 0, 0, 0.5);
+		transition: background-color .3s ease;
+		z-index: 200;
+	}
+
+	body.no-scroll-overlay {
+		overflow: hidden;
+	}
+
+	.tt-close-overlay {
+		align-self: flex-start;
+	}
+</style>
+
+</body>
+</html>
